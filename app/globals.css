@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Custom brand colors */
+  --color-terracotta: var(--terracotta);
+  --color-terracotta-light: var(--terracotta-light);
+  --color-cream: var(--cream);
+  --color-sage: var(--sage);
+  --color-sage-light: var(--sage-light);
+  --color-charcoal: var(--charcoal);
+  --color-warm-gray: var(--warm-gray);
+}
+
+:root {
+  /* Brand Colors - Warm, culinary, inviting */
+  --terracotta: #C65D3B;          /* Primary - warm rust/terracotta */
+  --terracotta-light: #E8A68C;    /* Lighter terracotta for hovers */
+  --cream: #FDF8F3;               /* Background - warm off-white */
+  --sage: #7D9B76;                /* Accent - herb green */
+  --sage-light: #B5C9B0;          /* Light sage for backgrounds */
+  --charcoal: #2D2926;            /* Text - warm dark */
+  --warm-gray: #6B635C;           /* Muted text */
+
+  /* ShadCN Theme mapping */
+  --background: #FDF8F3;          /* cream */
+  --foreground: #2D2926;          /* charcoal */
+  --card: #FFFFFF;
+  --card-foreground: #2D2926;
+  --popover: #FFFFFF;
+  --popover-foreground: #2D2926;
+  --primary: #C65D3B;             /* terracotta */
+  --primary-foreground: #FFFFFF;
+  --secondary: #F5EDE6;           /* warm beige */
+  --secondary-foreground: #2D2926;
+  --muted: #F5EDE6;
+  --muted-foreground: #6B635C;    /* warm-gray */
+  --accent: #7D9B76;              /* sage */
+  --accent-foreground: #FFFFFF;
+  --destructive: #DC4A3D;
+  --destructive-foreground: #FFFFFF;
+  --border: #E8DFD6;
+  --input: #E8DFD6;
+  --ring: #C65D3B;
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: #1A1816;
+  --foreground: #F5EDE6;
+  --card: #2D2926;
+  --card-foreground: #F5EDE6;
+  --popover: #2D2926;
+  --popover-foreground: #F5EDE6;
+  --primary: #E8A68C;
+  --primary-foreground: #1A1816;
+  --secondary: #3D3632;
+  --secondary-foreground: #F5EDE6;
+  --muted: #3D3632;
+  --muted-foreground: #A69D94;
+  --accent: #B5C9B0;
+  --accent-foreground: #1A1816;
+  --destructive: #E85D50;
+  --destructive-foreground: #FFFFFF;
+  --border: #3D3632;
+  --input: #3D3632;
+  --ring: #E8A68C;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+/* Custom utility classes for brand */
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, var(--terracotta) 0%, var(--sage) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-warm-gradient {
+    background: linear-gradient(180deg, var(--cream) 0%, #F5EDE6 100%);
+  }
+
+  .bg-hero-pattern {
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(198, 93, 59, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 50%, rgba(125, 155, 118, 0.08) 0%, transparent 50%);
+  }
+}
