@@ -118,3 +118,22 @@
       radial-gradient(circle at 80% 50%, rgba(125, 155, 118, 0.08) 0%, transparent 50%);
   }
 }
+
+/* Food gallery scroll animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+  width: max-content;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}

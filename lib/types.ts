@@ -1,66 +1,54 @@
-import type { ObjectId } from "mongodb";
-
 export interface Restaurant {
-  _id: ObjectId;
+  id: string;
   name: string;
   slug: string;
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
-    coordinates?: [number, number]; // [lng, lat]
-  };
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  latitude: number | null;
+  longitude: number | null;
   cuisine: string[];
   phone: string;
   website: string;
   hours: string;
   photos: string[];
-
-  // Claim status
   claimed: boolean;
-  claimedAt: Date | null;
-  ownerId: ObjectId | null;
-
-  // Chef recommendation
-  chefRecommendation: {
-    dish: string;
-    description: string;
-    photo: string | null;
-    updatedAt: Date;
-  } | null;
-
-  createdAt: Date;
-  updatedAt: Date;
+  claimed_at: Date | null;
+  owner_id: string | null;
+  chef_dish: string | null;
+  chef_description: string | null;
+  chef_photo: string | null;
+  chef_updated_at: Date | null;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface ClaimRequest {
-  _id: ObjectId;
-  restaurantId: ObjectId;
-
-  // Owner contact info
-  ownerName: string;
-  ownerEmail: string;
-  ownerPhone: string;
-  role: string; // "Owner", "Manager", "Chef"
-  verificationMethod: string; // How they'd like to be verified
-
-  // Status
+  id: string;
+  restaurant_id: string;
+  owner_name: string;
+  owner_email: string;
+  owner_phone: string;
+  role: string;
+  verification_method: string;
   status: "pending" | "approved" | "rejected";
-  verificationNotes: string;
+  verification_notes: string;
+  created_at: Date;
+  reviewed_at: Date | null;
+  reviewed_by: string | null;
+}
 
-  createdAt: Date;
-  reviewedAt: Date | null;
-  reviewedBy: string | null;
+export interface ClaimWithRestaurant extends ClaimRequest {
+  restaurant: Restaurant;
 }
 
 export interface AdminUser {
-  _id: ObjectId;
+  id: string;
   email: string;
   name: string;
   role: "admin";
 }
 
-// For creating new documents (without _id)
-export type CreateRestaurant = Omit<Restaurant, "_id">;
-export type CreateClaimRequest = Omit<ClaimRequest, "_id">;
+export type CreateRestaurant = Omit<Restaurant, "id" | "created_at" | "updated_at">;
+export type CreateClaimRequest = Omit<ClaimRequest, "id" | "created_at">;

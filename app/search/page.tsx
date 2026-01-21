@@ -15,16 +15,20 @@ async function SearchResults({ query }: { query: string }) {
     : await getRestaurants(20);
 
   const serialized = results.map((r) => ({
-    _id: r._id.toString(),
+    id: r.id,
     name: r.name,
     slug: r.slug,
-    address: r.address,
+    street: r.street,
+    city: r.city,
+    state: r.state,
+    zip: r.zip,
     cuisine: r.cuisine,
     phone: r.phone,
     website: r.website,
     hours: r.hours,
     claimed: r.claimed,
-    chefRecommendation: r.chefRecommendation,
+    chef_dish: r.chef_dish,
+    chef_description: r.chef_description,
   }));
 
   if (serialized.length === 0) {
@@ -43,7 +47,7 @@ async function SearchResults({ query }: { query: string }) {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {serialized.map((restaurant) => (
-        <RestaurantCard key={restaurant._id} restaurant={restaurant} />
+        <RestaurantCard key={restaurant.id} restaurant={restaurant} />
       ))}
     </div>
   );

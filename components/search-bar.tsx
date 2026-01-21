@@ -6,13 +6,11 @@ import { Search, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface SearchResult {
-  _id: string;
+  id: string;
   name: string;
   slug: string;
-  address: {
-    city: string;
-    state: string;
-  };
+  city: string;
+  state: string;
   cuisine: string[];
 }
 
@@ -53,7 +51,7 @@ export function SearchBar({ className }: { className?: string }) {
   }, [query, search]);
 
   const handleSelect = (result: SearchResult) => {
-    const city = result.address.city.toLowerCase().replace(/\s+/g, "-");
+    const city = result.city.toLowerCase().replace(/\s+/g, "-");
     router.push(`/${city}/${result.slug}`);
     setIsOpen(false);
     setQuery("");
@@ -109,7 +107,7 @@ export function SearchBar({ className }: { className?: string }) {
           ) : results.length > 0 ? (
             <ul className="py-2">
               {results.map((result, index) => (
-                <li key={result._id}>
+                <li key={result.id}>
                   <button
                     type="button"
                     onClick={() => handleSelect(result)}
@@ -122,7 +120,7 @@ export function SearchBar({ className }: { className?: string }) {
                     <div>
                       <div className="font-medium text-[var(--charcoal)]">{result.name}</div>
                       <div className="text-sm text-[var(--warm-gray)]">
-                        {result.address.city}, {result.address.state}
+                        {result.city}, {result.state}
                         {result.cuisine.length > 0 && (
                           <span className="text-[var(--sage)]"> · {result.cuisine.slice(0, 2).join(", ")}</span>
                         )}

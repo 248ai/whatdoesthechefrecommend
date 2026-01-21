@@ -4,30 +4,26 @@ import { cn } from "@/lib/utils";
 
 interface RestaurantCardProps {
   restaurant: {
-    _id: string;
+    id: string;
     name: string;
     slug: string;
-    address: {
-      street: string;
-      city: string;
-      state: string;
-      zip: string;
-    };
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
     cuisine: string[];
     phone: string;
     website: string;
     hours: string;
     claimed: boolean;
-    chefRecommendation: {
-      dish: string;
-      description: string;
-    } | null;
+    chef_dish: string | null;
+    chef_description: string | null;
   };
   compact?: boolean;
 }
 
 export function RestaurantCard({ restaurant, compact = false }: RestaurantCardProps) {
-  const citySlug = restaurant.address.city.toLowerCase().replace(/\s+/g, "-");
+  const citySlug = restaurant.city.toLowerCase().replace(/\s+/g, "-");
   const href = `/${citySlug}/${restaurant.slug}`;
 
   return (
@@ -42,7 +38,7 @@ export function RestaurantCard({ restaurant, compact = false }: RestaurantCardPr
               </h3>
               <div className="flex items-center gap-1.5 text-sm text-[var(--warm-gray)] mt-1">
                 <MapPin className="h-3.5 w-3.5" />
-                <span>{restaurant.address.city}, {restaurant.address.state}</span>
+                <span>{restaurant.city}, {restaurant.state}</span>
               </div>
             </div>
             {restaurant.claimed && (
@@ -73,14 +69,14 @@ export function RestaurantCard({ restaurant, compact = false }: RestaurantCardPr
               <Utensils className="h-4 w-4" />
               Chef Recommends
             </div>
-            {restaurant.chefRecommendation ? (
+            {restaurant.chef_dish ? (
               <div>
                 <p className="font-medium text-[var(--charcoal)]">
-                  &ldquo;{restaurant.chefRecommendation.dish}&rdquo;
+                  &ldquo;{restaurant.chef_dish}&rdquo;
                 </p>
-                {!compact && restaurant.chefRecommendation.description && (
+                {!compact && restaurant.chef_description && (
                   <p className="text-sm text-[var(--warm-gray)] mt-1.5 line-clamp-2">
-                    {restaurant.chefRecommendation.description}
+                    {restaurant.chef_description}
                   </p>
                 )}
               </div>

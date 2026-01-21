@@ -11,8 +11,9 @@ interface ClaimPageProps {
 export default async function ClaimPage({ params }: ClaimPageProps) {
   const { id } = await params;
 
-  // Validate ObjectId format
-  if (!/^[0-9a-fA-F]{24}$/.test(id)) {
+  // Validate UUID format (PostgreSQL uses UUIDs)
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(id)) {
     notFound();
   }
 
@@ -40,7 +41,7 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
             {restaurant.name} has already been claimed by its owner.
           </p>
           <Link
-            href={`/${restaurant.address.city.toLowerCase().replace(/\s+/g, "-")}/${restaurant.slug}`}
+            href={`/${restaurant.city.toLowerCase().replace(/\s+/g, "-")}/${restaurant.slug}`}
             className="text-[var(--terracotta)] font-medium hover:underline"
           >
             View restaurant profile
@@ -65,7 +66,7 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 mb-8 text-sm max-w-lg mx-auto">
           <Link
-            href={`/${restaurant.address.city.toLowerCase().replace(/\s+/g, "-")}/${restaurant.slug}`}
+            href={`/${restaurant.city.toLowerCase().replace(/\s+/g, "-")}/${restaurant.slug}`}
             className="inline-flex items-center gap-1 text-[var(--warm-gray)] hover:text-[var(--charcoal)] transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -74,7 +75,7 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
         </div>
 
         <ClaimForm
-          restaurantId={restaurant._id.toString()}
+          restaurantId={restaurant.id}
           restaurantName={restaurant.name}
         />
       </div>

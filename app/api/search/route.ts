@@ -12,12 +12,12 @@ export async function GET(request: Request) {
   try {
     const results = await searchRestaurants(query, 5);
 
-    // Serialize ObjectIds to strings
     const serialized = results.map((r) => ({
-      _id: r._id.toString(),
+      id: r.id,
       name: r.name,
       slug: r.slug,
-      address: r.address,
+      city: r.city,
+      state: r.state,
       cuisine: r.cuisine,
       claimed: r.claimed,
     }));

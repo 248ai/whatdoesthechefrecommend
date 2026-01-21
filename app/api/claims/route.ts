@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { ObjectId } from "mongodb";
 import { createClaimRequest, hasExistingClaim } from "@/lib/claims";
 import { getRestaurantById } from "@/lib/restaurants";
 
@@ -71,22 +70,21 @@ export async function POST(request: Request) {
 
     // Create the claim request
     const claimId = await createClaimRequest({
-      restaurantId: new ObjectId(restaurantId),
-      ownerName: ownerName.trim(),
-      ownerEmail: ownerEmail.toLowerCase().trim(),
-      ownerPhone: ownerPhone.trim(),
+      restaurant_id: restaurantId,
+      owner_name: ownerName.trim(),
+      owner_email: ownerEmail.toLowerCase().trim(),
+      owner_phone: ownerPhone.trim(),
       role,
-      verificationMethod: verificationMethod.trim(),
+      verification_method: verificationMethod.trim(),
       status: "pending",
-      verificationNotes: "",
-      createdAt: new Date(),
-      reviewedAt: null,
-      reviewedBy: null,
+      verification_notes: "",
+      reviewed_at: null,
+      reviewed_by: null,
     });
 
     return NextResponse.json({
       success: true,
-      claimId: claimId.toString(),
+      claimId,
     });
   } catch (error) {
     console.error("Claim submission error:", error);

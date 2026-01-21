@@ -65,19 +65,13 @@ export default async function ClaimsPage() {
         ) : (
           <div className="space-y-4">
             {pendingClaims.map((claim) => {
-              const restaurant = claim.restaurant as {
-                name: string;
-                slug: string;
-                address: { city: string; state: string };
-                website: string;
-                phone: string;
-              };
-              const citySlug = restaurant.address.city
+              const restaurant = claim.restaurant;
+              const citySlug = restaurant.city
                 .toLowerCase()
                 .replace(/\s+/g, "-");
 
               return (
-                <Card key={claim._id.toString()}>
+                <Card key={claim.id}>
                   <CardContent className="p-6">
                     <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
                       {/* Claim Info */}
@@ -87,7 +81,7 @@ export default async function ClaimsPage() {
                             {restaurant.name}
                           </h3>
                           <Badge variant="outline">
-                            {restaurant.address.city}, {restaurant.address.state}
+                            {restaurant.city}, {restaurant.state}
                           </Badge>
                         </div>
 
@@ -96,13 +90,13 @@ export default async function ClaimsPage() {
                           <div className="space-y-1.5">
                             <p className="text-sm font-medium">Claimant</p>
                             <p className="text-sm">
-                              {claim.ownerName} ({claim.role})
+                              {claim.owner_name} ({claim.role})
                             </p>
                             <p className="text-sm text-muted-foreground">
-                              {claim.ownerEmail}
+                              {claim.owner_email}
                             </p>
                             <p className="text-sm text-muted-foreground">
-                              {claim.ownerPhone}
+                              {claim.owner_phone}
                             </p>
                           </div>
 
@@ -110,7 +104,7 @@ export default async function ClaimsPage() {
                           <div className="space-y-1.5">
                             <p className="text-sm font-medium">Verification Method</p>
                             <p className="text-sm text-muted-foreground">
-                              {claim.verificationMethod}
+                              {claim.verification_method}
                             </p>
                           </div>
                         </div>
@@ -152,7 +146,7 @@ export default async function ClaimsPage() {
 
                         <p className="text-xs text-muted-foreground mt-4">
                           Submitted{" "}
-                          {new Date(claim.createdAt).toLocaleDateString("en-US", {
+                          {new Date(claim.created_at).toLocaleDateString("en-US", {
                             month: "short",
                             day: "numeric",
                             year: "numeric",
@@ -164,8 +158,8 @@ export default async function ClaimsPage() {
 
                       {/* Actions */}
                       <ClaimActions
-                        claimId={claim._id.toString()}
-                        restaurantId={claim.restaurantId.toString()}
+                        claimId={claim.id}
+                        restaurantId={claim.restaurant_id}
                       />
                     </div>
                   </CardContent>

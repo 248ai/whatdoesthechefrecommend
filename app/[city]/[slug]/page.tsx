@@ -27,8 +27,8 @@ export async function generateMetadata({
     return { title: "Restaurant Not Found" };
   }
 
-  const description = restaurant.chefRecommendation
-    ? `The chef at ${restaurant.name} recommends: ${restaurant.chefRecommendation.dish}`
+  const description = restaurant.chef_dish
+    ? `The chef at ${restaurant.name} recommends: ${restaurant.chef_dish}`
     : `Discover what the chef recommends at ${restaurant.name}`;
 
   return {
@@ -78,10 +78,10 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
           </Link>
           <span className="text-[var(--warm-gray)]">/</span>
           <Link
-            href={`/search?q=${encodeURIComponent(restaurant.address.city)}`}
+            href={`/search?q=${encodeURIComponent(restaurant.city)}`}
             className="text-[var(--warm-gray)] hover:text-[var(--charcoal)] transition-colors"
           >
-            {restaurant.address.city}
+            {restaurant.city}
           </Link>
           <span className="text-[var(--warm-gray)]">/</span>
           <span className="text-[var(--charcoal)]">{restaurant.name}</span>
@@ -131,14 +131,14 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
               </div>
             </div>
 
-            {restaurant.chefRecommendation ? (
+            {restaurant.chef_dish ? (
               <div className="bg-white rounded-xl p-6 shadow-sm border border-[var(--border)]">
                 <p className="font-serif text-2xl md:text-3xl text-[var(--charcoal)] mb-3">
-                  &ldquo;{restaurant.chefRecommendation.dish}&rdquo;
+                  &ldquo;{restaurant.chef_dish}&rdquo;
                 </p>
-                {restaurant.chefRecommendation.description && (
+                {restaurant.chef_description && (
                   <p className="text-[var(--warm-gray)] leading-relaxed">
-                    {restaurant.chefRecommendation.description}
+                    {restaurant.chef_description}
                   </p>
                 )}
               </div>
@@ -148,7 +148,7 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
                   This restaurant hasn&apos;t added a recommendation yet.
                 </p>
                 <Link
-                  href={`/claim/${restaurant._id.toString()}`}
+                  href={`/claim/${restaurant.id}`}
                   className="inline-flex items-center justify-center h-12 px-8 rounded-full bg-[var(--terracotta)] text-white font-medium hover:bg-[var(--terracotta)]/90 transition-colors"
                 >
                   Claim this restaurant
@@ -167,10 +167,10 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
             <div className="flex items-start gap-3">
               <MapPin className="h-5 w-5 text-[var(--terracotta)] mt-0.5" />
               <div>
-                <p className="text-[var(--charcoal)]">{restaurant.address.street}</p>
+                <p className="text-[var(--charcoal)]">{restaurant.street}</p>
                 <p className="text-[var(--warm-gray)]">
-                  {restaurant.address.city}, {restaurant.address.state}{" "}
-                  {restaurant.address.zip}
+                  {restaurant.city}, {restaurant.state}{" "}
+                  {restaurant.zip}
                 </p>
               </div>
             </div>
@@ -225,7 +225,7 @@ export default async function RestaurantPage({ params }: RestaurantPageProps) {
               Are you the owner of {restaurant.name}?
             </p>
             <Link
-              href={`/claim/${restaurant._id.toString()}`}
+              href={`/claim/${restaurant.id}`}
               className="inline-flex items-center justify-center h-11 px-6 rounded-full border-2 border-[var(--terracotta)] text-[var(--terracotta)] font-medium hover:bg-[var(--terracotta)] hover:text-white transition-colors"
             >
               Claim this restaurant

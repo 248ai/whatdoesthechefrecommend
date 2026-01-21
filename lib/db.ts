@@ -1,36 +1,61 @@
-import { MongoClient, type Db } from "mongodb";
+import { Pool, type PoolConfig } from "pg";
 
-const MONGODB_URI = process.env.MONGODB_URI!;
+const DATABASE_URL = process.env.DATABASE_URL;
 
-if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable");
+if (!DATABASE_URL) {
+  throw new Error("Please define the DATABASE_URL environment variable");
 }
 
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
+function getPoolConfig(): PoolConfig {
+  return {
+    connectionString: DATABASE_URL,
+    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+    min: 2,
+    max: 10,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
+  };
+}
+
+let pool: Pool;
 
 declare global {
   // eslint-disable-next-line no-var
-  var _mongoClientPromise: Promise<MongoClient> | undefined;
+  var _pgPool: Pool | undefined;
 }
 
 if (process.env.NODE_ENV === "development") {
-  // In development mode, use a global variable so that the value
-  // is preserved across module reloads caused by HMR (Hot Module Replacement).
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(MONGODB_URI);
-    global._mongoClientPromise = client.connect();
+  if (!global._pgPool) {
+    global._pgPool = new Pool(getPoolConfig());
   }
-  clientPromise = global._mongoClientPromise;
+  pool = global._pgPool;
 } else {
-  // In production mode, it's best to not use a global variable.
-  client = new MongoClient(MONGODB_URI);
-  clientPromise = client.connect();
+  pool = new Pool(getPoolConfig());
 }
 
-export async function getDb(): Promise<Db> {
-  const client = await clientPromise;
-  return client.db("chefrecommends");
+export async function query<T = Record<string, unknown>>(
+  text: string,
+  params?: unknown[]
+): Promise<T[]> {
+  const result = await pool.query(text, params);
+  return result.rows as T[];
 }
 
-export default clientPromise;
+export async function queryOne<T = Record<string, unknown>>(
+  text: string,
+  params?: unknown[]
+): Promise<T | null> {
+  const result = await pool.query(text, params);
+  return (result.rows[0] as T) || null;
+}
+
+export async function execute(
+  text: string,
+  params?: unknown[]
+): Promise<number> {
+  const result = await pool.query(text, params);
+  return result.rowCount ?? 0;
+}
+
+export { pool };
+export default pool;
