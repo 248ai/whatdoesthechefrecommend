@@ -159,3 +159,20 @@ export async function markRestaurantClaimed(id: string, ownerId: string): Promis
     [ownerId, id]
   );
 }
+
+export async function getRestaurantStats(): Promise<{
+  total: number;
+  claimed: number;
+}> {
+  const result = await queryOne<{ total: string; claimed: string }>(
+    `SELECT
+      COUNT(*) as total,
+      COUNT(*) FILTER (WHERE claimed = true) as claimed
+     FROM restaurants`
+  );
+
+  return {
+    total: parseInt(result?.total || "0", 10),
+    claimed: parseInt(result?.claimed || "0", 10),
+  };
+}

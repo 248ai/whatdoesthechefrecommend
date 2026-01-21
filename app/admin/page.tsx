@@ -5,19 +5,15 @@ import { auth, signOut } from "@/lib/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { getClaimStats } from "@/lib/claims";
-import { getDb } from "@/lib/db";
+import { getRestaurantStats } from "@/lib/restaurants";
 
 async function getStats() {
-  const db = await getDb();
   const claimStats = await getClaimStats();
-  const totalRestaurants = await db.collection("restaurants").countDocuments();
-  const claimedRestaurants = await db
-    .collection("restaurants")
-    .countDocuments({ claimed: true });
+  const restaurantStats = await getRestaurantStats();
 
   return {
-    totalRestaurants,
-    claimedRestaurants,
+    totalRestaurants: restaurantStats.total,
+    claimedRestaurants: restaurantStats.claimed,
     pendingClaims: claimStats.pending,
     approvedClaims: claimStats.approved,
   };
