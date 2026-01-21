@@ -7,9 +7,15 @@ function getPoolConfig(): PoolConfig {
     throw new Error("Please define the DATABASE_URL environment variable");
   }
 
+  // Railway internal connections don't use SSL (private network)
+  // Only enable SSL for external connections (URLs with public hostnames)
+  const isInternalRailway = DATABASE_URL.includes(".railway.internal");
+
   return {
     connectionString: DATABASE_URL,
-    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+    ssl: !isInternalRailway && process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
     min: 2,
     max: 10,
     idleTimeoutMillis: 30000,
