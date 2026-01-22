@@ -176,3 +176,35 @@ export async function getRestaurantStats(): Promise<{
     claimed: parseInt(result?.claimed || "0", 10),
   };
 }
+
+// Lightweight type for map markers (reduces payload size)
+export interface MapRestaurant {
+  id: string;
+  name: string;
+  slug: string;
+  city: string;
+  state: string;
+  latitude: number;
+  longitude: number;
+  claimed: boolean;
+  chef_dish: string | null;
+}
+
+export async function getAllRestaurantsForMap(): Promise<MapRestaurant[]> {
+  const rows = await query<{
+    id: string;
+    name: string;
+    slug: string;
+    city: string;
+    state: string;
+    latitude: number;
+    longitude: number;
+    claimed: boolean;
+    chef_dish: string | null;
+  }>(
+    `SELECT id, name, slug, city, state, latitude, longitude, claimed, chef_dish
+     FROM restaurants
+     WHERE latitude IS NOT NULL AND longitude IS NOT NULL`
+  );
+  return rows;
+}

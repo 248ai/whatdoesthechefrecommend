@@ -20,6 +20,8 @@ export async function GET(request: Request) {
       state: r.state,
       cuisine: r.cuisine,
       claimed: r.claimed,
+      latitude: r.latitude,
+      longitude: r.longitude,
     }));
 
     return NextResponse.json({ results: serialized });
